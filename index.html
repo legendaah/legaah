@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arifureta Portal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            color: #fff;
+            overflow: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .video-background {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            object-fit: cover;
+        }
+
+        .mobile-bg {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .video-background {
+                display: none;
+            }
+            
+            .mobile-bg {
+                display: block;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                min-width: 100%;
+                min-height: 100%;
+                width: auto;
+                height: auto;
+                transform: translate(-50%, -50%);
+                z-index: -1;
+                object-fit: cover;
+            }
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffd700, #ff6b35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .header-section {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .profile-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #ffd700;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px #ffd700); }
+            to { filter: drop-shadow(0 0 40px #ffd700); }
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-button {
+            background: rgba(26, 26, 46, 0.8);
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffd700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .nav-button:hover::before {
+            opacity: 1;
+            animation: shine 1s ease-in-out;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .nav-button:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3);
+            border-color: #ff6b35;
+            color: #ff6b35;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .header-section {
+                gap: 1rem;
+            }
+            
+            .profile-circle {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .buttons-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-button {
+                padding: 15px 30px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 1.8rem;
+            }
+            
+            .profile-circle {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .nav-button {
+                padding: 12px 25px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Проекты */
+        .projects-container {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .project-item {
+            background: rgba(26, 26, 46, 0.9);
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .project-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3);
+            border-color: #ff6b35;
+        }
+
+        .project-item h3 {
+            color: #ffd700;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .project-status {
+            color: #ff6b35;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Контакт */
+        .contact-container {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .contact-card {
+            background: rgba(26, 26, 46, 0.9);
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3);
+            border-color: #ff6b35;
+        }
+
+        .contact-avatar {
+            font-size: 2rem;
+            color: #ffd700;
+        }
+
+        .contact-name {
+            color: #ffd700;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .contact-username {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <img src="animated.gif" alt="Background" class="video-background">
+    <video autoplay muted loop class="mobile-bg">
+        <source src="background.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+
+    <div class="container">
+        <div class="header-section">
+            <div class="profile-circle">
+                <img src="background2" alt="Profile" class="profile-image">
+            </div>
+            <h1 class="title">Legenda</h1>
+        </div>
+        
+        <div class="buttons-container">
+            <div class="nav-button" onclick="toggleProjects()">
+                Проекты
+            </div>
+            <div class="nav-button" onclick="showContact()">
+                Связь со мной
+            </div>
+        </div>
+
+        <!-- Список проектов -->
+        <div id="projects-list" class="projects-container" style="display: none;">
+            <div class="project-item" onclick="openBot()">
+                <h3>Арифурэта - путь освободителя Bot</h3>
+                <span class="project-status">[BetaTest]</span>
+            </div>
+            <div class="project-item" onclick="openNews()">
+                <h3>Арифурэта - путь Освободителя</h3>
+                <span class="project-status">[News]</span>
+            </div>
+            <div class="project-item" onclick="openOrdersBot()">
+                <h3>Заказы/услуги</h3>
+                <span class="project-status">[Bot]</span>
+            </div>
+        </div>
+
+        <!-- Контакт -->
+        <div id="contact-info" class="contact-container" style="display: none;">
+            <div class="contact-card" onclick="openProfile()">
+                <div class="contact-avatar">👤</div>
+                <div class="contact-details">
+                    <div class="contact-name">Legenda</div>
+                    <div class="contact-username">@legendaah</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleProjects() {
+            const projects = document.getElementById('projects-list');
+            const contact = document.getElementById('contact-info');
+            
+            contact.style.display = 'none';
+            projects.style.display = projects.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showContact() {
+            const projects = document.getElementById('projects-list');
+            const contact = document.getElementById('contact-info');
+            
+            projects.style.display = 'none';
+            contact.style.display = contact.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function openBot() {
+            window.open('https://t.me/echodungeon_bot', '_blank');
+        }
+
+        function openNews() {
+            window.open('https://t.me/dungeonnews', '_blank');
+        }
+
+        function openOrdersBot() {
+            window.open('https://t.me/legendaah_bot', '_blank');
+        }
+
+        function openProfile() {
+            window.open('https://t.me/legendaah', '_blank');
+        }
+    </script>
+</body>
+</html>
